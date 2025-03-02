@@ -1,48 +1,38 @@
 import { createStore } from "vuex";
+import dnd, { type DndState } from "./modules/dnd";
+import journey, { type JourneyState } from "./modules/journey";
+import ui, { type UIState } from "./modules/ui";
 
-export const dndInitialState = {
-  draggedType: null as string | null,
-  isDragOver: false,
-  isDragging: false,
-};
+export interface State {
+  dnd: DndState,
+  journey: JourneyState,
+  ui: UIState,
+}
 
-export type DndState = typeof dndInitialState;
+const initialize = (): State => ({
+  dnd: dnd.state,
+  journey: journey.state,
+  ui: ui.state,
+});
 
-export type DragStartedPayload = Pick<DndState, "draggedType" | "isDragging">;
-
-export const initialState = { dnd: dndInitialState };
-
-export type State = typeof initialState;
-
-let mode = "prod" as "debug" | "prod";
+export let mode = "prod" as "debug" | "prod";
 // mode = "debug";
 
 export default createStore<State>({
-  state: initialState,
+  state: initialize(),
   getters: {
-    isDragging(state): boolean {
-      return state.dnd.isDragging;
-    }
+    ...dnd.getters,
+    ...journey.getters,
+    ...ui.getters,
   },
   mutations: {
-    dragStarted(state: State, payload: DragStartedPayload) {
-      if (mode == "debug") console.log("start", { dnd: state.dnd });
-      state.dnd.draggedType = payload.draggedType;
-      state.dnd.isDragging = payload.isDragging;
-    },
-    dragOver(state: State) {
-      if (mode == "debug") console.log("over", { dnd: state.dnd });
-      state.dnd.isDragOver = true;
-    },
-    dragLeave(state: State) {
-      if (mode == "debug") console.log("leave", { dnd: state.dnd });
-      state.dnd.isDragOver = false;
-    },
-    dragEnded(state: State) {
-      if (mode == "debug") console.log("end", { dnd: state.dnd });
-      state.dnd = dndInitialState;
-    }
+    ...dnd.mutations,
+    ...journey.mutations,
+    ...ui.mutations,
   },
   actions: {
+    ...dnd.actions,
+    ...journey.actions,
+    ...ui.actions,
   }
 });

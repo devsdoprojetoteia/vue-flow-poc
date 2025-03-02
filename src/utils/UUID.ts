@@ -1,23 +1,20 @@
 export default class UUID {
 
-  private source: string;
+  readonly source: string;
 
-  constructor(source: string | UUID) {
-    switch (typeof source) {
-      case "string":
-        if (!UUID.isValid(source))
-          throw Error(`The given string is not a valid UUID: ${source}`);
-    
-        this.source = source;
-        break;
-      default:
-        this.source = source.source;
-        break;
-    }
+  constructor(source: string) {
+    if (!UUID.isValid(source))
+      throw Error(`The given string is not a valid UUID: ${source}`);
+
+    this.source = source;
   }
 
   toString(): string {
     return this.source;
+  }
+
+  static copy(uuid: UUID) {
+    return new UUID(uuid.source);
   }
 
   static random() {

@@ -1,11 +1,11 @@
 import { Node, useVueFlow } from '@vue-flow/core';
-import { ref, watch } from 'vue'
-import UUID from '../utils/UUID'
 import { useStore } from 'vuex';
 import { type State } from '../store/store';
+import { computed } from 'vue';
+import type { Journey } from '../domain/Journey/Journey';
 
 export default function useDragAndDrop() {
-  const $store = useStore<State>();
+  const store = useStore<State>();
 
   const {
     addNodes,
@@ -14,23 +14,27 @@ export default function useDragAndDrop() {
     updateNode,
   } = useVueFlow();
 
-  const isDragging = ref($store.state.dnd.isDragging);
+  const isDragging = computed(() => store.state.dnd.isDragging);
 
-  watch(isDragging, (state) => {
-    console.log(state);
-    document.body.style.userSelect = state ? 'none' : '';
-  });
+  store.watch(
+    (state) => {
+      return state.dnd.isDragging
+    },
+    (newValue) => {
+      document.body.style.userSelect = newValue ? 'none' : '';
+      return newValue;
+    }
+  );
 
-  function onDragStart(event: any, draggedType: any, payload: any = {}) {
+  function onDragStart(event: any, payload: any = {}) {
     if (event.dataTransfer) {
-      event.dataTransfer.setData('application/vueflow', draggedType);
+      console.log({payload});
+      event.dataTransfer.setData('application/vueflow', payload.step);
       event.dataTransfer.setData('payload', JSON.stringify(payload));
       event.dataTransfer.effectAllowed = 'move';
     }
 
-    const isDragging = true;
-
-    $store.commit("dragStarted", { draggedType, isDragging });
+    store.commit("dragStarted", { draggedType: payload.step, isDragging: true });
     document.addEventListener('drop', onDragEnd);
   }
 
@@ -42,10 +46,10 @@ export default function useDragAndDrop() {
   function onDragOver(event: any) {
     event.preventDefault();
 
-    const { draggedType } = $store.state.dnd;
+    const { draggedType } = store.state.dnd;
 
     if (draggedType) {
-      $store.commit("dragOver");
+      store.commit("dragOver");
 
       if (event.dataTransfer) {
         event.dataTransfer.dropEffect = 'move';
@@ -54,11 +58,13 @@ export default function useDragAndDrop() {
   }
 
   function onDragLeave() {
-    $store.commit("dragLeave");
+    const stage = "dragLeave";
+    store.commit(stage);
   }
 
   function onDragEnd() {
-    $store.commit("dragEnded");
+    const stage = "dragEnded";
+    store.commit(stage);
     document.removeEventListener('drop', onDragEnd);
   }
 
@@ -74,14 +80,15 @@ export default function useDragAndDrop() {
       y: event.clientY,
     });
 
-    const nodeId = UUID.random().toString();
+    const data: Journey.Step = JSON.parse(payload);
+    const nodeId = data.id.source;
 
     const newNode: Node = {
-      id: UUID.random().toString(),
-      type: $store.state.dnd.draggedType ?? "default",
+      id: nodeId,
+      type: store.state.dnd.draggedType ?? "default",
       position,
-      data: JSON.parse(payload),
-    }
+      data,
+    };
 
     /**
      * Align node position after drop, so it's centered to the mouse
@@ -91,12 +98,12 @@ export default function useDragAndDrop() {
     const { off } = onNodesInitialized(() => {
       updateNode(nodeId, (node) => ({
         position: { x: node.position.x - node.dimensions.width / 2, y: node.position.y - node.dimensions.height / 2 },
-      }))
+      }));
 
-      off()
+      off();
     })
 
-    addNodes(newNode)
+    addNodes(newNode);
   }
 
   return {
@@ -104,5 +111,6 @@ export default function useDragAndDrop() {
     onDragLeave,
     onDragOver,
     onDrop,
+    isDragging,
   }
 }

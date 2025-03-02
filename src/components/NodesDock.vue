@@ -1,5 +1,6 @@
 <script setup>
-import useDragAndDrop from "../composables/useDnD";
+import useDnD from "../composables/useDnD";
+import JourneyStepFactory from "../domain/Journey/JourneyStepFactory";
 import UUID from "../utils/UUID";
 import {
   RootNode,
@@ -12,50 +13,7 @@ import {
   RedirectNode,
 } from "./CustomNodes";
 
-const { onDragStart } = useDragAndDrop();
-
-const initialStates = {
-  message: { 
-    type: "text", // text | image | video
-    content: "Hello, World!",
-  },
-  redirect: { 
-    title: "Título da Jornada",
-    targetJourneyId: "ID_DA_JORNADA",
-  },
-  declaration: { 
-    variable: {
-      name: "exemplo", 
-      type: "string", 
-      value: "O valor da variável vai aqui :D"
-    }
-  },
-  decision: {
-    title: "Exemplo de seleção:",
-    sourceVariableName: "gostaDeBanana",
-    options: [
-      { id: UUID.random(), value: "true" },
-      { id: UUID.random(), value: "false" }
-    ]
-  },
-  integration: {
-    targetVariableName: "resposta",
-    request: {
-      url: "https://example.com",
-    }
-  },
-  textInput: {
-    variableName: "oQueFoiDito"
-  },
-  selection: {
-    title: "Exemplo de seleção:",
-    options: [
-      { id: UUID.random(), label: "Sim 👍" },
-      { id: UUID.random(), label: "Não 👎" }
-    ],
-    defaultOption: { id: UUID.random(), variableName: "respostaImprevista" },
-  }
-}
+const { onDragStart } = useDnD();
 </script>
 
 <template>
@@ -68,7 +26,7 @@ const initialStates = {
       <li
         class="vue-flow__node-message"
         :draggable="true"
-        @dragstart="onDragStart($event, 'message', initialStates.message)"
+        @dragstart="onDragStart($event, JourneyStepFactory.message())"
       >
         <div class="node-preview" id="message">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -84,7 +42,7 @@ const initialStates = {
       <li
         class="vue-flow__node-redirect"
         :draggable="true"
-        @dragstart="onDragStart($event, 'redirect', initialStates.redirect)"
+        @dragstart="onDragStart($event, JourneyStepFactory.redirect())"
       >
         <div class="node-preview" id="redirect">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -105,7 +63,7 @@ const initialStates = {
       <li
         class="vue-flow__node-declaration"
         :draggable="true"
-        @dragstart="onDragStart($event, 'declaration', initialStates.declaration)"
+        @dragstart="onDragStart($event, JourneyStepFactory.declaration())"
       >
         <div class="node-preview" id="declaration">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -121,7 +79,7 @@ const initialStates = {
       <li
         class="vue-flow__node-decision"
         :draggable="true"
-        @dragstart="onDragStart($event, 'decision', initialStates.decision)"
+        @dragstart="onDragStart($event, JourneyStepFactory.decision())"
       >
         <div class="node-preview" id="decision">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -137,7 +95,7 @@ const initialStates = {
       <li
         class="vue-flow__node-integration"
         :draggable="true"
-        @dragstart="onDragStart($event, 'integration', initialStates.integration)"
+        @dragstart="onDragStart($event, JourneyStepFactory.integration())"
       >
         <div class="node-preview" id="integration">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -158,7 +116,7 @@ const initialStates = {
       <li
         class="vue-flow__node-textInput"
         :draggable="true"
-        @dragstart="onDragStart($event, 'textInput', initialStates.textInput)"
+        @dragstart="onDragStart($event, JourneyStepFactory.textInput())"
       >
         <div class="node-preview" id="text">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -174,7 +132,7 @@ const initialStates = {
       <li
         class="vue-flow__node-selection"
         :draggable="true"
-        @dragstart="onDragStart($event, 'selection', initialStates.selection)"
+        @dragstart="onDragStart($event, JourneyStepFactory.selection())"
       >
         <div class="node-preview" id="selection">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">

@@ -14,25 +14,24 @@ import { computed, ref } from "vue";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import DropzoneBackground from "./components/DropzoneBackground.vue";
 import NodesDock from "./components/NodesDock.vue";
+import StepEditorDrawer from "./components/StepEditorDrawer.vue";
 import useDragAndDrop from "./composables/useDnD";
 import UUID from "./utils/UUID";
-import { useStore } from "vuex";
 import { State } from "./store/store";
+import useNodeEditor from "./composables/useNodeEditor";
 
 const { onConnect, addEdges, removeEdges, edges } = useVueFlow();
-
-const $store = useStore<State>();
-
-const { onDragOver, onDrop, onDragLeave } = useDragAndDrop();
+const { onDragOver, onDrop, onDragLeave, isDragging } = useDragAndDrop();
+const { isEditing } = useNodeEditor();
 
 const connections: Record<string, string> = {};
 
 const nodes = ref([
   {
-    id: UUID.random().toString(),
+    id: UUID.random().source,
     type: "root",
     position: { x: -25, y: 0 },
-    data: { journeyId: "924621c3-49dd-51b1-a783-ca098e485fa1" },
+    data: { journeyId: UUID.random().source },
     deletable: false,
     selectable: false,
     draggable: false,
@@ -66,6 +65,8 @@ onConnect((connection) => {
 
 <template>
   <div class="dnd-flow" @drop="onDrop">
+    <NodesDock />
+
     <VueFlow
       :nodes="nodes"
       :edges="edges"
@@ -82,7 +83,7 @@ onConnect((connection) => {
         <MessageNode v-bind="messageNodeProps" />
       </template>
       <!-- NÓ DE RECEBIMENTO DE MENSAGEM -->
-      <template #node-textInput="textInputNodeProps">
+      <template #node-text-input="textInputNodeProps">
         <TextInputNode v-bind="textInputNodeProps" />
       </template>
       <!-- NÓ DE DECLARAÇÃO DE VARIÁVEL -->
@@ -108,19 +109,19 @@ onConnect((connection) => {
 
       <DropzoneBackground
         :style="{
-          backgroundColor: $store.state.dnd.isDragging
+          backgroundColor: isDragging
             ? '#e7f3ff'
             : 'transparent',
           transition: 'background-color 0.2s ease',
         }"
       >
-        <p v-if="$store.state.dnd.isDragging">Solte o nó aqui</p>
-      </DropzoneBackground>
+        <p v-if="isDragging">Solte o nó aqui</p>
 
       <Background variant="dots" />
+      </DropzoneBackground>
     </VueFlow>
 
-    <NodesDock />
+    <StepEditorDrawer v-if="isEditing" />
   </div>
 </template>
 

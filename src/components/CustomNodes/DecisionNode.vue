@@ -2,14 +2,17 @@
 import { computed } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
+import useNodeEditor from "../../composables/useNodeEditor";
+import { Journey } from "../../domain/Journey/Journey";
 
-const { data } = defineProps<NodeProps>();
+const { edit } = useNodeEditor();
+const { data } = defineProps<NodeProps<Journey.Decision>>();
 
 const title = computed(() => data.title);
-const sourceVariableName = computed(() => `{{ ${data.sourceVariableName} }}`);
-const options = computed(() =>
-  data.options.map(({ id, value }) => {
-    return { id: id.source, value };
+const defaultId = computed(() => data.default);
+const expressions = computed(() =>
+  data.expressions.map(({ id, ...rest }) => {
+    return { id: id.source, ...rest };
   })
 );
 </script>
@@ -18,7 +21,7 @@ const options = computed(() =>
   <div class="vue-flow__node-default node-wrapper">
     <div class="title">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <title>apple-keyboard-option</title>
+        <title>apple-keyboard-expression</title>
         <path d="M3,4H9.11L16.15,18H21V20H14.88L7.84,6H3V4M14,4H21V6H14V4Z" />
       </svg>
 
@@ -26,6 +29,7 @@ const options = computed(() =>
 
       <svg
         class="edit-button"
+        @click="() => edit(data)"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -42,20 +46,32 @@ const options = computed(() =>
 
     <div class="divider" />
 
-    <code class="varname">{{ sourceVariableName }}</code>
-
-    <div class="divider" />
-
-    <div class="options-wrapper" v-for="option in options">
-      <div class="option">
-        <code class="option-value">{{ option.value }}</code>
+    <div class="expressions-wrapper" v-for="tree in expressions">
+      <div class="expression">
+        <code class="expression-value">
+          {{ tree.expression.left }}
+          {{ tree.expression.operator }}
+          {{ tree.expression.right }}
+        </code>
         <Handle
-          :id="option.id"
+          :id="tree.id"
           class="socket"
           type="source"
           :position="Position.Right"
         />
       </div>
+    </div>
+
+    <div class="divider" />
+
+    <div class="expression">
+      <code class="expression-value">default</code>
+      <Handle
+        :id="defaultId"
+        class="socket"
+        type="source"
+        :position="Position.Right"
+      />
     </div>
 
     <Handle class="socket" type="target" :position="Position.Left" />
@@ -131,8 +147,8 @@ const options = computed(() =>
 }
 
 .decision-title,
-.varname,
-.option-value {
+.default,
+.expression-value {
   margin: 1em;
   font-size: 0.4rem;
   overflow: hidden;
@@ -144,11 +160,11 @@ const options = computed(() =>
   position: relative;
 }
 
-.option {
+.expression {
   position: relative;
 }
 
-.option > .socket {
+.expression > .socket {
   position: absolute;
   top: 50%;
   right: 0;

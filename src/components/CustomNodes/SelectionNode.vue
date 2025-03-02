@@ -2,9 +2,9 @@
 import { computed } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { HandleConnectableFunc, NodeProps } from "@vue-flow/core";
+import useNodeEditor from "../../composables/useNodeEditor";
 
-const connectedTo: string[] = [];
-
+const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
 
 const title = computed(() => data.title);
@@ -33,6 +33,7 @@ const defaultOption = computed(() => ({
 
       <svg
         class="edit-button"
+        @click="() => edit(data)"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >

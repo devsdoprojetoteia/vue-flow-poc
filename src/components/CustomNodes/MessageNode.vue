@@ -2,10 +2,13 @@
 import { computed } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
+import { Journey } from "../../domain/Journey/Journey";
+import useNodeEditor from "../../composables/useNodeEditor";
 
-const { data } = defineProps<NodeProps>();
+const { edit } = useNodeEditor();
+const { data } = defineProps<NodeProps<Journey.Message>>();
 
-const type = computed(() => data.type as "text" | "image" | "video");
+const type = computed(() => data.type);
 const content = computed(() => data.content);
 </script>
 
@@ -23,6 +26,7 @@ const content = computed(() => data.content);
 
       <svg
         class="edit-button"
+        @click="() => edit(data)"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -35,7 +39,7 @@ const content = computed(() => data.content);
 
     <div class="divider" />
 
-    <p v-if="type == 'text'" class="content">{{ content }}</p>
+    <p v-if="type == 'text' || type == 'video'" class="content">{{ content }}</p>
     <img v-if="type == 'image'" class="content" :src="content">
 
     <Handle class="socket" type="target" :position="Position.Left" />
@@ -121,7 +125,6 @@ const content = computed(() => data.content);
   -webkit-box-orient: vertical;
   text-align: justify;
   position: relative;
-  z-index: 1;
 }
 
 .socket {

@@ -24,6 +24,7 @@ export namespace Journey {
 
   export interface Step {
     id: UUID;
+    step: StepType;
   }
 
   /**
@@ -141,7 +142,7 @@ export namespace Journey {
    */
   export interface Decision extends Step {
     title: string;
-    variableName: string;
+    default: UUID;
     expressions: Decision.ExpressionTree[];
   }
 

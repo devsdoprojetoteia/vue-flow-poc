@@ -22,6 +22,6 @@ import { Background } from '@vue-flow/background';
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 10 !important;
 }
 </style>

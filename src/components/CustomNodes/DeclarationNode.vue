@@ -2,7 +2,9 @@
 import { computed } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
+import useNodeEditor from "../../composables/useNodeEditor";
 
+const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
 
 const variable = computed(() => {
@@ -35,6 +37,7 @@ const variable = computed(() => {
 
       <svg
         class="edit-button"
+        @click="() => edit(data)"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
@@ -132,7 +135,6 @@ const variable = computed(() => {
   -webkit-box-orient: vertical;
   text-align: left;
   position: relative;
-  z-index: 1;
 }
 
 .socket {
