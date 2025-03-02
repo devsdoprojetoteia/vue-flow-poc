@@ -1,0 +1,122 @@
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.42.1/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/core@1.42.1/dist/theme-default.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
+@import 'https://fonts.googleapis.com/css2?family=Roboto: ital,wght@0,100..900;1,100..900&display=swap';
+@import 'https://fonts.googleapis.com/css2?family=Roboto+Mono: ital,wght@0,100..700;1,100..700&family=Roboto: ital,wght@0,100..900;1,100..900&display=swap';
+
+:root {
+	--root-node-color: rgb(24, 177, 83);
+	/* OUTPUTS */
+	--message-node-color: #D35400;
+	--redirect-node-color: #B03A2E;
+	/* PROCESSAMENTO */
+	--declaration-node-color: #294bb9;
+	--decision-node-color: #078b94;
+	--integration-node-color: #5aa74c;
+	/* INPUTS */
+	--text-input-node-color: #6c29b9;
+	--selection-node-color: #8E44AD;
+
+	--default-shadow-highlight: 0px 0px 5px -1px rgba(0, 0, 0, 0.6);
+	--default-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.3);
+}
+
+code {
+	font-family: 'Roboto Mono', Courier, monospace !important;
+}
+
+html,
+body,
+#app {
+	margin: 0;
+	height: 100%;
+}
+
+#app {
+	font-family: 'Roboto', 'Arial', 'Calibri';
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+}
+
+.vue-flow__node {
+  background: white;
+}
+
+.vue-flow__minimap {
+	transform: scale(75%);
+	transform-origin: bottom right;
+}
+
+
+.dnd-flow {
+	flex-direction: column;
+	display: flex;
+	height: 100%;
+}
+
+.dnd-flow aside {
+	color: #333;
+	font-weight: 700;
+	border-right: 1px solid #eee;
+	padding: 16px;
+	font-size: 12px;
+	background: #fff;
+	-webkit-box-shadow: 0px 5px 10px 0px rgba(0,0,0,.3);
+	box-shadow: 0 5px 10px #0000004d;
+}
+
+/* .dnd-flow aside .nodes>* {
+	margin-bottom: 10px;
+	font-weight: 500;
+	-webkit-box-shadow: 5px 5px 10px 2px rgba(0,0,0,.25);
+	box-shadow: 5px 5px 10px 2px #00000040;
+} */
+
+.dnd-flow aside .nodes>* {
+  border-radius: 2px;
+  background: white;
+  border: 2px solid lightgray;
+  -webkit-box-shadow: var(--default-shadow);
+  -moz-box-shadow: var(--default-shadow);
+  box-shadow: var(--default-shadow);
+  color: black;
+  padding: 0;
+}
+
+.dnd-flow aside .nodes>*:hover {
+  border: 2px solid lightblue;
+  -webkit-box-shadow: var(--default-shadow-highlight);
+  -moz-box-shadow: var(--default-shadow-highlight);
+  box-shadow: var(--default-shadow-highlight);
+}
+
+.dnd-flow aside .description {
+	margin-bottom: 16px;
+}
+
+.dnd-flow .vue-flow-wrapper {
+	flex-grow: 1;
+	height: 100%;
+}
+
+@media screen and (min-width: 640px) {
+	.dnd-flow {
+		flex-direction: row;
+	}
+
+	.dnd-flow aside {
+		/* min-width: 25%;
+		max-width: 100px; */
+	}
+}
+
+@media screen and (max-width: 639px) {
+	.dnd-flow aside .nodes {
+		display: flex;
+		flex-direction: row;
+		gap: 5px;
+	}
+}

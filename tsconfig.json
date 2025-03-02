@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "types": ["vite/client", "@vue/runtime-dom"],
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "jsx": "preserve",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.vue", "vue-ssr/**/*.vue"], // Inclua arquivos .vue
+  "exclude": ["node_modules"],
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
+}
