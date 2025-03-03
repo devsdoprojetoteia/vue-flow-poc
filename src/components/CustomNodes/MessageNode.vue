@@ -43,6 +43,11 @@ const b64 = computed(() => data.b64);
       <img class="content" :src="b64" />
     </template>
 
+    <template v-if="type === 'video'">
+      <div class="divider" />
+      <video controls class="content" />
+    </template>
+
     <Handle class="socket" type="target" :position="Position.Left" />
     <Handle class="socket" type="source" :position="Position.Right" />
   </div>
@@ -128,7 +133,7 @@ const b64 = computed(() => data.b64);
   position: relative;
 }
 
-img {
+img, video {
   width: calc(100% - 0.8rem);
 }
 
