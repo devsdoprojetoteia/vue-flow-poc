@@ -10,7 +10,7 @@ import {
   RedirectNode,
 } from "./components/CustomNodes";
 
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
 import DropzoneBackground from "./components/DropzoneBackground.vue";
 import NodesDock from "./components/NodesDock.vue";
@@ -20,9 +20,30 @@ import UUID from "./utils/UUID";
 import { State } from "./store/store";
 import useNodeEditor from "./composables/useNodeEditor";
 
-const { onConnect, addEdges, removeEdges, edges } = useVueFlow();
+const {
+  onInit,
+  onConnect,
+  addEdges,
+  removeEdges,
+  edges,
+  fromObject,
+  toObject,
+} = useVueFlow();
 const { onDragOver, onDrop, onDragLeave, isDragging } = useDragAndDrop();
 const { isEditing } = useNodeEditor();
+
+const rawDiagram = localStorage.getItem("diagram");
+let restoredDiagram: any = {};
+
+async function restoreDiagram() {
+  if (!!rawDiagram) {
+    restoredDiagram = JSON.parse(rawDiagram);
+    await fromObject(restoredDiagram);
+    console.log("restored", { restoredDiagram });
+  }
+}
+
+onInit(restoreDiagram);
 
 const connections: Record<string, string> = {};
 
@@ -60,6 +81,8 @@ onConnect((connection) => {
 
   connections[source] =
     animatedConnection.targetHandle ?? animatedConnection.target;
+
+  localStorage.setItem("diagram", JSON.stringify(toObject()));
 });
 </script>
 
@@ -109,15 +132,13 @@ onConnect((connection) => {
 
       <DropzoneBackground
         :style="{
-          backgroundColor: isDragging
-            ? '#e7f3ff'
-            : 'transparent',
+          backgroundColor: isDragging ? '#e7f3ff' : 'transparent',
           transition: 'background-color 0.2s ease',
         }"
       >
         <p v-if="isDragging">Solte o nó aqui</p>
 
-      <Background variant="dots" />
+        <Background variant="dots" />
       </DropzoneBackground>
     </VueFlow>
 

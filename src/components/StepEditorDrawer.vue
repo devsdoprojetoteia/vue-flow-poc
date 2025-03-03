@@ -5,19 +5,43 @@ import humanizeStepType from "../utils/humanize/humanizeStepType";
 import useNodeEditor from "../composables/useNodeEditor";
 import { Journey } from "../domain/Journey/Journey";
 import MessageEditor from "./StepEditors/MessageEditor.vue";
+import capitalize from "../utils/humanize/capitalize";
+import NodeIcon from "./NodeIcon.vue";
+import ftob from "../utils/ftob";
+import RedirectEditor from "./StepEditors/RedirectEditor.vue";
+import DeclarationEditor from "./StepEditors/DeclarationEditor.vue";
+import DecisionEditor from "./StepEditors/DecisionEditor.vue";
+import IntegrationEditor from "./StepEditors/IntegrationEditor.vue";
+import SelectionEditor from "./StepEditors/SelectionEditor.vue";
+import TextInputEditor from "./StepEditors/TextInputEditor.vue";
 
-const { isEditing, cancel, nodeData } = useNodeEditor();
+const { cancel, nodeData, apply } = useNodeEditor();
 
 const step = computed(() => nodeData.value.step);
-const title = computed(() => `Editando o nó ${humanizeStepType(step.value)}`);
+const title = computed(() => capitalize(humanizeStepType(step.value)));
+
+async function handleSubmit(data: any) {
+  if (step.value === "message" && data.type === "image") {
+    apply({ ...data, content: await ftob(data) });
+  } else apply(data);
+}
 </script>
 
 <template>
   <div class="drawer-wrapper">
     <div class="background" @click="cancel" />
     <div class="drawer-content">
-      <div class="drawer-header">
+      <div
+        class="drawer-header"
+        :style="{
+          color: `var(--${step}-node-color)`,
+          fill: `var(--${step}-node-color)`,
+        }"
+      >
+        <NodeIcon :type="step ?? 'root'" />
+
         <h3 class="drawer-header-title">{{ title }}</h3>
+
         <svg
           class="drawer-close-button"
           @click="cancel"
@@ -30,8 +54,23 @@ const title = computed(() => `Editando o nó ${humanizeStepType(step.value)}`);
           />
         </svg>
       </div>
-      <MessageEditor v-if="step == 'message'" />
-      <div class="form-wrapper"></div>
+
+      <div class="form-wrapper">
+        <FormKit
+          type="form"
+          submit-label="Salvar"
+          v-model="nodeData"
+          @submit="handleSubmit"
+        >
+          <MessageEditor v-if="step === 'message'" v-bind="nodeData" />
+          <RedirectEditor v-if="step === 'redirect'" v-bind="nodeData" />
+          <DeclarationEditor v-if="step === 'declaration'" v-bind="nodeData" />
+          <DecisionEditor v-if="step === 'decision'" v-bind="nodeData" />
+          <IntegrationEditor v-if="step === 'integration'" v-bind="nodeData" />
+          <TextInputEditor v-if="step === 'text-input'" v-bind="nodeData" />
+          <SelectionEditor v-if="step === 'selection'" v-bind="nodeData" />
+        </FormKit>
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +83,7 @@ const title = computed(() => `Editando o nó ${humanizeStepType(step.value)}`);
   height: 100%;
   width: 100%;
   display: flex;
+  overflow: scroll;
 }
 
 .background {
@@ -64,15 +104,29 @@ const title = computed(() => `Editando o nó ${humanizeStepType(step.value)}`);
 .drawer-header {
   display: flex;
   flex-direction: row;
-  align-items: space-between;
+  align-items: center;
   justify-content: center;
+  margin-bottom: 16px;
 }
 
-.drawer-header-title {
+.drawer-header > svg {
+  height: 24px;
+  fill: var(--message-node-color);
+  padding: 2px;
+  border-radius: 2px;
+}
+
+h3.drawer-header-title {
   flex: 1;
+  padding: 0 8px;
+  margin: 0 auto;
 }
 
 .drawer-close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  fill: black !important;
   height: 16px;
   width: 16px;
   padding: 2px;

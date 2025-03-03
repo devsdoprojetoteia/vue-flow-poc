@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import { Journey } from "../../domain/Journey/Journey";
 import useNodeEditor from "../../composables/useNodeEditor";
+import NodeIcon from "../NodeIcon.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps<Journey.Message>>();
@@ -15,12 +16,7 @@ const content = computed(() => data.content);
 <template>
   <div class="vue-flow__node-default node-wrapper">
     <div class="title">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <title>chat</title>
-        <path
-          d="M12,3C17.5,3 22,6.58 22,11C22,15.42 17.5,19 12,19C10.76,19 9.57,18.82 8.47,18.5C5.55,21 2,21 2,21C4.33,18.67 4.7,17.1 4.75,16.5C3.05,15.07 2,13.13 2,11C2,6.58 6.5,3 12,3Z"
-        />
-      </svg>
+      <NodeIcon type="message" />
 
       <h4>Mensagem</h4>
 
@@ -39,8 +35,8 @@ const content = computed(() => data.content);
 
     <div class="divider" />
 
-    <p v-if="type == 'text' || type == 'video'" class="content">{{ content }}</p>
-    <img v-if="type == 'image'" class="content" :src="content">
+    <p v-if="type === 'text'" class="content">{{ content }}</p>
+    <img v-if="type === 'image'" class="content" :src="content" />
 
     <Handle class="socket" type="target" :position="Position.Left" />
     <Handle class="socket" type="source" :position="Position.Right" />
@@ -125,6 +121,10 @@ const content = computed(() => data.content);
   -webkit-box-orient: vertical;
   text-align: justify;
   position: relative;
+}
+
+img {
+  width: calc(100% - 0.8rem);
 }
 
 .socket {

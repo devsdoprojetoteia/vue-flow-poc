@@ -4,6 +4,7 @@ import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import { Journey } from "../../domain/Journey/Journey";
+import NodeIcon from "../NodeIcon.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps<Journey.Decision>>();
@@ -20,10 +21,7 @@ const expressions = computed(() =>
 <template>
   <div class="vue-flow__node-default node-wrapper">
     <div class="title">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <title>apple-keyboard-expression</title>
-        <path d="M3,4H9.11L16.15,18H21V20H14.88L7.84,6H3V4M14,4H21V6H14V4Z" />
-      </svg>
+      <NodeIcon type="decision" />
 
       <h4>Decisão</h4>
 

@@ -1,7 +1,9 @@
 import type { Journey } from "../../domain/Journey/Journey";
 
-export default function humanizeStepType(stepType?: Journey.StepType) {
-  if (!stepType) return undefined;
+export default function humanizeStepType(
+  stepType?: Journey.StepType,
+): string | undefined {
+  if (!stepType) return stepType;
 
   const dict: Record<Journey.StepType, string> = {
     root: "raíz",

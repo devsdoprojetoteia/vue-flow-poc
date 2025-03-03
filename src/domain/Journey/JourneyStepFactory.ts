@@ -7,14 +7,14 @@ const journeyStepFactory: Journey.StepFactory = {
       id: UUID.random(),
       step: "message",
       type: "text",
-      content: "Hello, World!",
+      content: "Hello, {{ world }}!",
     }
   },
   redirect() {
     return {
       id: UUID.random(),
       step: "redirect",
-      title: "Título da Jornada",
+      title: "Jornada Teste",
       targetJourneyId: UUID.random(),
     }
   },
@@ -24,7 +24,7 @@ const journeyStepFactory: Journey.StepFactory = {
       step: "declaration",
       variable: {
         name: "foo",
-        type: "string" as "string" | "boolean" | "number" | "object" | "array",
+        type: "string",
         value: "bar"
       }
     }
@@ -39,7 +39,7 @@ const journeyStepFactory: Journey.StepFactory = {
         {
           id: UUID.random(),
           expression: {
-            left: "{{ gostaDeBanana }}", 
+            left: "{{ variavel }}", 
             operator: "eq", 
             right: "true"
           }
@@ -47,7 +47,7 @@ const journeyStepFactory: Journey.StepFactory = {
         {
           id: UUID.random(),
           expression: {
-            left: "{{ gostaDeBanana }}", 
+            left: "{{ variavel }}", 
             operator: "eq", 
             right: "false"
           }
@@ -69,7 +69,7 @@ const journeyStepFactory: Journey.StepFactory = {
     return {
       id: UUID.random(),
       step: "text-input",
-      variableName: "oQueFoiDito"
+      variableName: "resposta"
     }
   },
   selection() {

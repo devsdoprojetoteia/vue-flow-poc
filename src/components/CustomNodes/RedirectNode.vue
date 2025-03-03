@@ -3,23 +3,19 @@ import { computed } from "vue";
 import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
+import NodeIcon from "../NodeIcon.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
 
 const title = computed(() => data.title);
-const targetJourneyId = computed(() => data.targetJourneyId);
+const targetJourneyId = computed(() => data.targetJourneyId.source);
 </script>
 
 <template>
   <div class="vue-flow__node-default node-wrapper">
     <div class="title">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <title>swap-horizontal-bold</title>
-        <path
-          d="M8,10V13H14V18H8V21L2,15.5L8,10M22,8.5L16,3V6H10V11H16V14L22,8.5Z"
-        />
-      </svg>
+      <NodeIcon type="redirect" />
 
       <h4>Redirecionamento</h4>
 

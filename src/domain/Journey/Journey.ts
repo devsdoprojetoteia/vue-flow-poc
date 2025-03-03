@@ -104,8 +104,13 @@ export namespace Journey {
     export interface Request {
       url: string,
       method: Method,
-      headers: Record<string, string>,
+      headers: Header[],
       body: any,
+    }
+
+    export interface Header {
+      name: string;
+      value: string;
     }
 
   }
