@@ -3,10 +3,12 @@ import type { State } from "../store";
 
 export interface JourneyState {
   editingStep: Partial<Journey.Step>;
+  synchronizing: boolean;
 }
 
 const initialize = (): JourneyState => ({
   editingStep: {},
+  synchronizing: false,
 });
 
 export default {
@@ -19,7 +21,13 @@ export default {
     },
     editFinished(state: State) {
       state.journey = initialize();
-    }
+    },
+    synchronizationStarted(state: State) {
+      state.journey.synchronizing = true;
+    },
+    synchronizationFinished(state: State) {
+      state.journey.synchronizing = false;
+    },
   },
   actions: {
   }

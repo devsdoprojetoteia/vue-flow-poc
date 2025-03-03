@@ -33,23 +33,23 @@ const journeyStepFactory: Journey.StepFactory = {
     return {
       id: UUID.random(),
       step: "decision",
-      title: "Exemplo de seleção:",
+      title: "Exemplo de decisão:",
       default: UUID.random(),
       expressions: [
         {
           id: UUID.random(),
           expression: {
             left: "{{ variavel }}", 
-            operator: "eq", 
-            right: "true"
+            operator: "is_true",
+            right: undefined,
           }
         },
         {
           id: UUID.random(),
           expression: {
             left: "{{ variavel }}", 
-            operator: "eq", 
-            right: "false"
+            operator: "is_false",
+            right: undefined,
           }
         },
       ]

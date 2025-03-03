@@ -1,5 +1,6 @@
 <script setup>
 import useDnD from "../composables/useDnD";
+import useJourneySync from "../composables/useJourneySync";
 import JourneyStepFactory from "../domain/Journey/JourneyStepFactory";
 import UUID from "../utils/UUID";
 import {
@@ -15,6 +16,7 @@ import {
 import NodeIcon from "./NodeIcon.vue";
 
 const { onDragStart } = useDnD();
+const { isSynchronizing } = useJourneySync();
 </script>
 
 <template>
@@ -105,10 +107,22 @@ const { onDragStart } = useDnD();
         </div>
       </li>
     </ul>
+
+    <div class="footer" v-if="isSynchronizing">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <title>loading</title>
+        <path d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+      </svg>
+      <span> Sincronizando... </span>
+    </div>
   </aside>
 </template>
 
 <style scoped>
+aside {
+  position: relative;
+}
+
 ul.nodes {
   list-style-type: none;
   padding: 0;
@@ -160,5 +174,24 @@ svg {
 #integration {
   color: var(--integration-node-color) !important;
   fill: currentColor !important;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  text-align: center;
+  padding: 8px 16px;
+  background: #fff4;
+}
+
+.footer > svg {
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  to {
+    transform: rotate(1turn);
+  }
 }
 </style>

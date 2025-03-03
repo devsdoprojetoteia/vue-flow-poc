@@ -22,7 +22,6 @@ const messageTypeOptions = computed(() =>
     validation="required"
   />
   <FormKit
-    v-if="type === 'text'"
     name="content"
     type="textarea"
     label="Conteúdo"
@@ -31,7 +30,7 @@ const messageTypeOptions = computed(() =>
   />
   <FormKit
     v-if="type == 'image'"
-    name="content"
+    name="upload"
     type="file"
     label="Arquivo"
     accept=".png,.jpeg,.jpg"
@@ -41,7 +40,7 @@ const messageTypeOptions = computed(() =>
   />
   <FormKit
     v-if="type == 'video'"
-    name="content"
+    name="upload"
     type="file"
     label="Arquivo"
     accept=".mp4"

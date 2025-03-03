@@ -43,7 +43,9 @@ export namespace Journey {
    */
   export interface Message extends Step {
     type: Message.Type;
-    content: string;
+    content?: string;
+    upload?: { name: string; files: File[] },
+    b64?: string,
   }
 
   export namespace Message {

@@ -19,12 +19,6 @@ const { cancel, nodeData, apply } = useNodeEditor();
 
 const step = computed(() => nodeData.value.step);
 const title = computed(() => capitalize(humanizeStepType(step.value)));
-
-async function handleSubmit(data: any) {
-  if (step.value === "message" && data.type === "image") {
-    apply({ ...data, content: await ftob(data) });
-  } else apply(data);
-}
 </script>
 
 <template>
@@ -60,7 +54,7 @@ async function handleSubmit(data: any) {
           type="form"
           submit-label="Salvar"
           v-model="nodeData"
-          @submit="handleSubmit"
+          @submit="apply"
         >
           <MessageEditor v-if="step === 'message'" v-bind="nodeData" />
           <RedirectEditor v-if="step === 'redirect'" v-bind="nodeData" />

@@ -11,6 +11,7 @@ const { data } = defineProps<NodeProps<Journey.Message>>();
 
 const type = computed(() => data.type);
 const content = computed(() => data.content);
+const b64 = computed(() => data.b64);
 </script>
 
 <template>
@@ -35,8 +36,12 @@ const content = computed(() => data.content);
 
     <div class="divider" />
 
-    <p v-if="type === 'text'" class="content">{{ content }}</p>
-    <img v-if="type === 'image'" class="content" :src="content" />
+    <p class="content">{{ content }}</p>
+
+    <template v-if="type === 'image'">
+      <div class="divider" />
+      <img class="content" :src="b64" />
+    </template>
 
     <Handle class="socket" type="target" :position="Position.Left" />
     <Handle class="socket" type="source" :position="Position.Right" />

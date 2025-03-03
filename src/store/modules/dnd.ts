@@ -36,7 +36,7 @@ export default {
       state.dnd.isDragOver = false;
     },
     dragEnded(state: State) {
-      console.log("end", { dnd: state.dnd });
+      if (mode == "debug") console.log("end", { dnd: state.dnd });
       state.dnd = initialize();
     }
   },

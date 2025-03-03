@@ -10,7 +10,7 @@ const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps<Journey.Decision>>();
 
 const title = computed(() => data.title);
-const defaultId = computed(() => data.default);
+const defaultId = computed(() => data.default.source);
 const expressions = computed(() =>
   data.expressions.map(({ id, ...rest }) => {
     return { id: id.source, ...rest };

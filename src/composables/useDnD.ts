@@ -3,6 +3,7 @@ import { useStore } from 'vuex';
 import { type State } from '../store/store';
 import { computed } from 'vue';
 import type { Journey } from '../domain/Journey/Journey';
+import useJourneySync from './useJourneySync';
 
 export default function useDragAndDrop() {
   const store = useStore<State>();
@@ -14,6 +15,7 @@ export default function useDragAndDrop() {
     updateNode,
     toObject,
   } = useVueFlow();
+  const { save } = useJourneySync();
 
   const isDragging = computed(() => store.state.dnd.isDragging);
 
@@ -29,7 +31,6 @@ export default function useDragAndDrop() {
 
   function onDragStart(event: any, payload: any = {}) {
     if (event.dataTransfer) {
-      console.log({ payload });
       event.dataTransfer.setData('application/vueflow', payload.step);
       event.dataTransfer.setData('payload', JSON.stringify(payload));
       event.dataTransfer.effectAllowed = 'move';
@@ -106,7 +107,7 @@ export default function useDragAndDrop() {
 
     addNodes(newNode);
 
-    localStorage.setItem("diagram", JSON.stringify(toObject()));
+    save();
   }
 
   return {

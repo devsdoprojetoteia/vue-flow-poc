@@ -2,7 +2,7 @@ export default async function ftob(fileUpload: any) {
   try {
     const b64 = await new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.readAsDataURL(fileUpload.content[0].file);
+      reader.readAsDataURL(fileUpload.upload[0].file);
       reader.onload = () => resolve(reader.result);
       reader.onerror = reject;
     });

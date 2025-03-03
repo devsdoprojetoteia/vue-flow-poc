@@ -12,6 +12,7 @@ import {
 
 import { computed, ref, watchEffect } from "vue";
 import { VueFlow, useVueFlow } from "@vue-flow/core";
+import { MiniMap } from "@vue-flow/minimap";
 import DropzoneBackground from "./components/DropzoneBackground.vue";
 import NodesDock from "./components/NodesDock.vue";
 import StepEditorDrawer from "./components/StepEditorDrawer.vue";
@@ -19,31 +20,14 @@ import useDragAndDrop from "./composables/useDnD";
 import UUID from "./utils/UUID";
 import { State } from "./store/store";
 import useNodeEditor from "./composables/useNodeEditor";
+import useJourneySync from "./composables/useJourneySync";
 
-const {
-  onInit,
-  onConnect,
-  addEdges,
-  removeEdges,
-  edges,
-  fromObject,
-  toObject,
-} = useVueFlow();
+const { onInit, onConnect, addEdges, removeEdges, edges } = useVueFlow();
 const { onDragOver, onDrop, onDragLeave, isDragging } = useDragAndDrop();
 const { isEditing } = useNodeEditor();
+const { save, restore } = useJourneySync();
 
-const rawDiagram = localStorage.getItem("diagram");
-let restoredDiagram: any = {};
-
-async function restoreDiagram() {
-  if (!!rawDiagram) {
-    restoredDiagram = JSON.parse(rawDiagram);
-    await fromObject(restoredDiagram);
-    console.log("restored", { restoredDiagram });
-  }
-}
-
-onInit(restoreDiagram);
+onInit(async () => await restore());
 
 const connections: Record<string, string> = {};
 
@@ -60,7 +44,11 @@ const nodes = ref([
 ]);
 
 onConnect((connection) => {
-  const animatedConnection = { ...connection, animated: true };
+  const animatedConnection = {
+    ...connection,
+    animated: true,
+    type: "smoothstep",
+  };
   const source = animatedConnection.sourceHandle ?? animatedConnection.source;
   const currentTarget = connections[source];
 
@@ -82,7 +70,7 @@ onConnect((connection) => {
   connections[source] =
     animatedConnection.targetHandle ?? animatedConnection.target;
 
-  localStorage.setItem("diagram", JSON.stringify(toObject()));
+  save();
 });
 </script>
 
@@ -140,6 +128,8 @@ onConnect((connection) => {
 
         <Background variant="dots" />
       </DropzoneBackground>
+
+      <MiniMap pannable zoomable />
     </VueFlow>
 
     <StepEditorDrawer v-if="isEditing" />

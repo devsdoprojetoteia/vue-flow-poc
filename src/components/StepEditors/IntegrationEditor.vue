@@ -101,8 +101,14 @@ const requestMethodOptions = computed(() =>
   align-items: start;
   justify-content: space-around;
   border: 2px solid var(--integration-node-color);
+  background: rgb(from var(--integration-node-color) r g b / 5%);
+  border-radius: 16px;
   margin-bottom: 4px;
-  padding: 8px 0;
+  padding: 8px 4px;
+}
+
+.group > .formkit-outer {
+  margin: 0 4px;
 }
 
 svg {
@@ -110,7 +116,8 @@ svg {
 }
 
 svg.delete {
-  margin: 24px 0;
+  margin: auto;
+  padding: 4px 12px;
   fill: red;
   cursor: pointer;
 }
@@ -133,11 +140,12 @@ button.add {
   display: flex;
   align-items: center;
   padding: 4px 8px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
 button.add:hover {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 button.add > svg {
