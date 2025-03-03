@@ -2,6 +2,13 @@ import UUID from "../../utils/UUID"
 import type { Journey } from "./Journey"
 
 const journeyStepFactory: Journey.StepFactory = {
+  root() {
+    return {
+      id: UUID.random(),
+      step: "root",
+      journeyId: UUID.random(),
+    }
+  },
   message() {
     return {
       id: UUID.random(),
@@ -39,7 +46,7 @@ const journeyStepFactory: Journey.StepFactory = {
         {
           id: UUID.random(),
           expression: {
-            left: "{{ variavel }}", 
+            left: "{{ variavel }}",
             operator: "is_true",
             right: undefined,
           }
@@ -47,7 +54,7 @@ const journeyStepFactory: Journey.StepFactory = {
         {
           id: UUID.random(),
           expression: {
-            left: "{{ variavel }}", 
+            left: "{{ variavel }}",
             operator: "is_false",
             right: undefined,
           }

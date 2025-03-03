@@ -24,6 +24,20 @@ const { isSynchronizing } = useJourneySync();
     <h3 class="description">Arraste o nó desejado</h3>
 
     <hr />
+
+    <ul class="nodes">
+      <li
+        class="vue-flow__node-root"
+        :draggable="true"
+        @dragstart="onDragStart($event, JourneyStepFactory.root())"
+      >
+        <div class="node-preview" id="root">
+          <NodeIcon type="root" />
+          <h4>Jornada</h4>
+        </div>
+      </li>
+    </ul>
+
     <h3>Outputs</h3>
     <ul class="nodes">
       <li
@@ -147,6 +161,10 @@ svg {
   height: 12px !important;
 }
 
+#root {
+  color: var(--root-node-color) !important;
+  fill: currentColor !important;
+}
 #message {
   color: var(--message-node-color) !important;
   fill: currentColor !important;

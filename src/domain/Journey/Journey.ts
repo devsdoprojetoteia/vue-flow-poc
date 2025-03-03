@@ -13,6 +13,7 @@ export namespace Journey {
     | "selection";
 
   export type StepFactory = {
+    root(id?: string | UUID): Root,
     message(id?: string | UUID): Message,
     redirect(id?: string | UUID): Redirect,
     declaration(id?: string | UUID): Declaration,

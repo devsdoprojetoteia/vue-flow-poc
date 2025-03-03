@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { Position, Handle } from "@vue-flow/core";
+import { Position, Handle, NodeProps } from "@vue-flow/core";
 import NodeIcon from "../NodeIcon.vue";
+import { Journey } from "../../domain/Journey/Journey";
+
+const { data } = defineProps<NodeProps<Journey.Root>>();
+
+function copyToClipboard() {
+  navigator.clipboard.writeText(data.journeyId.source);
+}
 </script>
 
 <template>
@@ -12,6 +19,7 @@ import NodeIcon from "../NodeIcon.vue";
 
       <svg
         class="copy-to-clipboard-button"
+        @click="copyToClipboard"
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
