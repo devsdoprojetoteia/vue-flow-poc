@@ -3,14 +3,14 @@ import { computed } from "vue";
 import { Journey } from "../domain/Journey/Journey";
 
 export interface NodeIconProps {
-  type: Journey.StepType;
+  type: Journey.StepType | "unknown";
   title?: string;
 }
 
 const { type, title } = defineProps<NodeIconProps>();
 
 const style = computed(() => ({
-  fill: `var(--${type}-node-color) !important`,
+  fill: `currentColor`,
 }));
 </script>
 

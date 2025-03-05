@@ -77,7 +77,6 @@ const title = computed(() => capitalize(humanizeStepType(step.value)));
   height: 100%;
   width: 100%;
   display: flex;
-  overflow: scroll;
 }
 
 .background {
@@ -93,6 +92,8 @@ const title = computed(() => capitalize(humanizeStepType(step.value)));
   background: white;
   padding: 1rem;
   display: block;
+  max-height: 100vh;
+  overflow: scroll;
 }
 
 .drawer-header {

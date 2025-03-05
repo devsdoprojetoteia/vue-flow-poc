@@ -46,7 +46,7 @@ const defaultOption = computed(() => ({
 
     <div class="divider" />
 
-    <div class="options-wrapper" v-for="option in options">
+    <div class="options-wrapper" v-for="option in options" :key="option.id">
       <div class="option">
         <div class="option-label">{{ option.label }}</div>
         <Handle

@@ -44,7 +44,7 @@ const expressions = computed(() =>
 
     <div class="divider" />
 
-    <div class="expressions-wrapper" v-for="tree in expressions">
+    <div class="expressions-wrapper" v-for="tree in expressions" :key="tree.id">
       <div class="expression">
         <code class="expression-value">
           {{ tree.expression.left }}

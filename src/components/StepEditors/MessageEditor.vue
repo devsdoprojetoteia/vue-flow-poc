@@ -26,7 +26,6 @@ const messageTypeOptions = computed(() =>
     type="textarea"
     label="Conteúdo"
     help="💡 Este campo aceita interpolação de variáveis. Ex.: {{ variavel }}."
-    validation="required"
   />
   <FormKit
     v-if="type == 'image'"

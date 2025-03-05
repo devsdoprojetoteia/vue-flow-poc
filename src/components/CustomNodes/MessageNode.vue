@@ -34,9 +34,10 @@ const b64 = computed(() => data.b64);
       </svg>
     </div>
 
-    <div class="divider" />
-
-    <p class="content">{{ content }}</p>
+    <template v-if="!!content">
+      <div class="divider" />
+      <p class="content">{{ content }}</p>
+    </template>
 
     <template v-if="type === 'image'">
       <div class="divider" />
@@ -126,14 +127,15 @@ const b64 = computed(() => data.b64);
   font-size: 0.4rem;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 4;
-  line-clamp: 4;
+  -webkit-line-clamp: 12;
+  line-clamp: 12;
   -webkit-box-orient: vertical;
   text-align: justify;
   position: relative;
 }
 
-img, video {
+img,
+video {
   width: calc(100% - 0.8rem);
 }
 

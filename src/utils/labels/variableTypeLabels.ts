@@ -1,8 +1,8 @@
 import type { Journey } from "../../domain/Journey/Journey";
 
 const variableTypeLabels: Record<Journey.Declaration.VariableType, string> = {
-  array: "lista ➔ []",
-  object: "objeto ➔ {}",
+  array: "lista ➔ [ ... ]",
+  object: "objeto ➔ { ... }",
   boolean: "booleano ➔ true | false",
   number: "número ➔ 1, 2, 3...",
   string: `texto ➔ "Hello, world!"`,

@@ -28,6 +28,16 @@ export namespace Journey {
     step: StepType;
   }
 
+  export type ImplementedStep =
+    | Root
+    | Message
+    | Redirect
+    | Declaration
+    | Decision
+    | Integration
+    | TextInput
+    | Selection
+
   /**
    * ===========================================================================
    * Nó raíz/inicial
@@ -125,7 +135,7 @@ export namespace Journey {
    */
   export interface Selection extends Step {
     title: string;
-    options?: Selection.Option[];
+    options: Selection.Option[];
     defaultOption: Selection.DefaultOption;
   }
 
@@ -177,12 +187,12 @@ export namespace Journey {
 
     export type Operator = UnaryOperator | BinaryOperator;
 
-    export type Children = string | number | boolean | ExpressionNode | undefined;
+    export type Children = string | ExpressionNode;
 
     export type ExpressionNode = {
       left: Children;
       operator: Operator;
-      right: Children;
+      right?: Children;
     };
 
     export interface ExpressionTree {
@@ -196,7 +206,7 @@ export namespace Journey {
    * Nó de redirecionamento de jornada
    * ===========================================================================
    */
-  export interface Redirect {
+  export interface Redirect extends Step {
     title: string;
     targetJourneyId: UUID;
   }
