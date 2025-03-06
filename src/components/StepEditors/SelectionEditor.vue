@@ -16,7 +16,12 @@ const operatorOptions = computed(() =>
     type="text"
     label="Título"
     help="Observação do editor (o chatbot não enviará como mensagem)."
-    validation="required"
+  />
+  <FormKit
+    name="content"
+    type="textarea"
+    label="Introdução"
+    help="Opcionalmente, você pode embutir uma mensagem amigável aqui."
   />
   <FormKit
     name="options"

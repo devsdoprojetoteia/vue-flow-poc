@@ -108,6 +108,7 @@ export namespace Journey {
   export interface Integration extends Step {
     variableName: string;
     request: Partial<Integration.Request>;
+    mock?: any;
   }
 
   export namespace Integration {
@@ -134,7 +135,8 @@ export namespace Journey {
    * ===========================================================================
    */
   export interface Selection extends Step {
-    title: string;
+    title?: string;
+    content?: string;
     options: Selection.Option[];
     defaultOption: Selection.DefaultOption;
   }
@@ -159,7 +161,7 @@ export namespace Journey {
    * ===========================================================================
    */
   export interface Decision extends Step {
-    title: string;
+    title?: string;
     default: UUID;
     expressions: Decision.ExpressionTree[];
   }

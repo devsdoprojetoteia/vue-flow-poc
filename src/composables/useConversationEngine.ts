@@ -6,7 +6,6 @@ import UUID from "../utils/UUID";
 import EmulatedEngine, { type Engine } from "../domain/Conversation/Engine";
 import type { Chat } from "../store/modules/chat";
 
-let engine: EmulatedEngine | undefined = undefined;
 let delayedActions: (() => void)[] = [];
 
 export default function useConversationEngine() {
@@ -46,53 +45,57 @@ export default function useConversationEngine() {
 
   function sendBotMessage(
     message: Engine.ChatIO,
-    type: Chat.Message.Type = "incomming"
+    type: Chat.Message.Type = "incoming"
   ) {
     delayedActions.push(() => store.commit("sendMessage", { ...message, type }));
   }
 
   async function deploy() {
-    store.commit("deployStarted");
     store.commit("openModal");
-    engine = EmulatedEngine.create(
-      nodes.value,
-      edges.value,
-      sendBotMessage,
-      onStatusChange,
-      onStateUpdate,
-      onFail,
-    );
-    engine.start();
-    setTimeout(() => store.commit("deployFinished"), 1000);
+
+    if (!window.emulatedEngine) {
+      store.commit("deployStarted");
+
+      window.emulatedEngine = EmulatedEngine.create(
+        nodes.value,
+        edges.value,
+        sendBotMessage,
+        onStatusChange,
+        onStateUpdate,
+        onFail,
+      );
+      window.emulatedEngine.start();
+
+      setTimeout(() => store.commit("deployFinished"), 1000);
+    }
   }
 
   function cancel() {
-    store.commit("clearMessages");
-    store.commit("resetChat");
-    engine = undefined;
     store.commit("closeModal");
   }
 
-  function sendMessage({ content }: { content: string }) {
+  function sendMessage(
+    { content, inputMetadata }: Pick<Chat.Message, "content" | "inputMetadata">,
+  ) {
     if (!content) return;
 
     const userInput: Chat.Message = {
       id: UUID.random(),
-      content: content,
+      content: content.trim(),
+      inputMetadata,
       type: "outgoing",
       sentAt: new Date(),
     };
 
     store.commit("sendMessage", userInput);
 
-    console.log({ engine, userInput });
-    engine?.next(userInput);
+    window.emulatedEngine?.next(userInput);
   }
 
   function clearMessages() {
     store.commit("clearMessages");
     store.commit("resetChat");
-    engine = EmulatedEngine.create(
+    window.emulatedEngine = EmulatedEngine.create(
       nodes.value,
       edges.value,
       sendBotMessage,
@@ -100,7 +103,7 @@ export default function useConversationEngine() {
       onStateUpdate,
       onFail,
     );
-    engine.start();
+    window.emulatedEngine.start();
   }
 
   return {

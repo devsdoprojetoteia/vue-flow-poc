@@ -4,11 +4,14 @@ import { Position, Handle } from "@vue-flow/core";
 import type { HandleConnectableFunc, NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import Markdown from "../Markdown.vue";
+import Variable from "../Variable.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
 
 const title = computed(() => data.title);
+const content = computed(() => data.content);
 const options = computed(() =>
   data.options.map(({ id, label }) => {
     return { id: id.source, label };
@@ -40,15 +43,21 @@ const defaultOption = computed(() => ({
       </svg>
     </div>
 
-    <div class="divider" />
+    <template v-if="!!title">
+      <div class="divider" />
+      <b class="selection-title">{{ title }}</b>
+    </template>
 
-    <b class="selection-title">{{ title }}</b>
+    <template v-if="!!content">
+      <div class="divider" />
+      <Markdown class="selection-content" :content="content" />
+    </template>
 
     <div class="divider" />
 
     <div class="options-wrapper" v-for="option in options" :key="option.id">
       <div class="option">
-        <div class="option-label">{{ option.label }}</div>
+        <Markdown class="option-label" :content="option.label" />
         <Handle
           :id="option.id"
           class="socket"
@@ -63,7 +72,7 @@ const defaultOption = computed(() => ({
     <div class="divider" />
 
     <div class="option">
-      <code class="option-label">{{ defaultOption.variableName }}</code>
+      <Variable class="option-label" :content="defaultOption.variableName" />
       <Handle
         :id="defaultOption.id"
         class="socket"
@@ -145,6 +154,7 @@ const defaultOption = computed(() => ({
 }
 
 .selection-title,
+.selection-content,
 .option-label {
   margin: 1em;
   font-size: 0.4rem;
@@ -155,6 +165,15 @@ const defaultOption = computed(() => ({
   -webkit-box-orient: vertical;
   text-align: justify;
   position: relative;
+}
+
+.selection-content {
+  -webkit-line-clamp: 6;
+  line-clamp: 6;
+}
+
+.selection-content > p {
+  padding: 0;
 }
 
 .option {

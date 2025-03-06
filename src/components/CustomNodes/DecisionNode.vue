@@ -5,6 +5,7 @@ import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import { Journey } from "../../domain/Journey/Journey";
 import NodeIcon from "../NodeIcon.vue";
+import Variable from "../Variable.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps<Journey.Decision>>();
@@ -38,18 +39,20 @@ const expressions = computed(() =>
       </svg>
     </div>
 
-    <div class="divider" />
+    <template v-if="!!title">
+      <div class="divider" />
 
-    <b class="decision-title">{{ title }}</b>
+      <b class="decision-title">{{ title }}</b>
+    </template>
 
     <div class="divider" />
 
     <div class="expressions-wrapper" v-for="tree in expressions" :key="tree.id">
       <div class="expression">
         <code class="expression-value">
-          {{ tree.expression.left }}
-          {{ tree.expression.operator }}
-          {{ tree.expression.right }}
+          <Variable :content="tree.expression.left" />
+          <b>{{ tree.expression.operator }}</b>
+          <Variable :content="tree.expression.right" />
         </code>
         <Handle
           :id="tree.id"
@@ -63,7 +66,7 @@ const expressions = computed(() =>
     <div class="divider" />
 
     <div class="expression">
-      <code class="expression-value">default</code>
+      <code class="expression-value default">default</code>
       <Handle
         :id="defaultId"
         class="socket"
@@ -158,8 +161,26 @@ const expressions = computed(() =>
   position: relative;
 }
 
+.default {
+  color: darkmagenta;
+  font-weight: bold;
+}
+
 .expression {
   position: relative;
+}
+
+.expression-value {
+  display: flex;
+  gap: 2px;
+}
+
+.expression-value > b {
+  color: darkmagenta;
+}
+
+.expression-value > .highlighted-variable {
+  gap: 2px;
 }
 
 .expression > .socket {

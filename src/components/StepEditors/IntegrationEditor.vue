@@ -86,11 +86,18 @@ const requestMethodOptions = computed(() =>
         </button>
       </div>
     </FormKit>
+    <FormKit
+      name="body"
+      type="textarea"
+      label="Corpo"
+      help="💡 Este campo aceita interpolação de variáveis. Ex.: {{ variavel }}."
+    />
   </FormKit>
+
   <FormKit
-    name="body"
+    name="mock"
     type="textarea"
-    label="Corpo"
+    label="Mock (apenas para testes)"
     help="💡 Este campo aceita interpolação de variáveis. Ex.: {{ variavel }}."
   />
 </template>

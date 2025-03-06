@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import useConversationEngine from "../../composables/useConversationEngine";
 import { Chat } from "../../store/modules/chat";
-import { useStore } from "vuex";
-import { State } from "../../store/store";
 import Ballon from "./Ballon.vue";
 import Debug from "./Debug.vue";
 
-const store = useStore<State>();
 const { isDeploying, cancel, messages, sendMessage, clearMessages, debug } =
   useConversationEngine();
 
 const scrollZone = ref<HTMLElement>();
 let autoScroll = true;
+
+function hangleOptionSelection(value: string, label?: string) {
+  sendMessage({
+    content: label,
+    inputMetadata: { selectedOption: value },
+  });
+  setTimeout(scrollToBottom);
+}
 
 function handleSubmit(data: Pick<Chat.Message, "content">, { reset }: any) {
   sendMessage(data);
@@ -29,8 +34,6 @@ function scrollToBottom() {
   });
 }
 
-store.watch((state: State) => state.chat.messages, scrollToBottom);
-
 const checkScrollPosition = () => {
   if (!scrollZone.value) return;
 
@@ -44,6 +47,10 @@ onMounted(() => {
   scrollToBottom();
   scrollZone.value?.addEventListener("scroll", checkScrollPosition);
 });
+
+onUpdated(() => {
+  scrollToBottom();
+})
 </script>
 
 <template>
@@ -79,6 +86,7 @@ onMounted(() => {
           v-for="message in messages"
           :key="message.id.source"
           v-bind="message"
+          @select-option="hangleOptionSelection"
         />
       </div>
 

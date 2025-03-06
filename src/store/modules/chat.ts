@@ -7,7 +7,7 @@ export namespace Chat {
 
   export namespace Message {
 
-    export type Type = "outgoing" | "incomming" | "error";
+    export type Type = "outgoing" | "incoming" | "error";
 
   }
 

@@ -5,6 +5,7 @@ import type { NodeProps } from "@vue-flow/core";
 import { Journey } from "../../domain/Journey/Journey";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import Markdown from "../Markdown.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps<Journey.Message>>();
@@ -36,7 +37,7 @@ const b64 = computed(() => data.b64);
 
     <template v-if="!!content">
       <div class="divider" />
-      <p class="content">{{ content }}</p>
+      <Markdown class="content" :content="content" />
     </template>
 
     <template v-if="type === 'image'">

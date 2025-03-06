@@ -40,7 +40,6 @@ const journeyStepFactory: Journey.StepFactory = {
     return {
       id: UUID.random(),
       step: "decision",
-      title: "Exemplo de decisão:",
       default: UUID.random(),
       expressions: [
         {
@@ -83,12 +82,11 @@ const journeyStepFactory: Journey.StepFactory = {
     return {
       id: UUID.random(),
       step: "selection",
-      title: "Exemplo de seleção:",
       options: [
         { id: UUID.random(), label: "Sim 👍" },
         { id: UUID.random(), label: "Não 👎" }
       ],
-      defaultOption: { id: UUID.random(), variableName: "respostaImprevista" },
+      defaultOption: { id: UUID.random(), variableName: "resposta" },
     }
   }
 }

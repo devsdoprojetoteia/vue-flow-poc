@@ -4,6 +4,7 @@ import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import Variable from "../Variable.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
@@ -33,7 +34,7 @@ const variableName = computed(() => `{{ ${data.variableName} }}`);
 
     <div class="divider" />
 
-    <code class="varname">{{ variableName }}</code>
+    <Variable class="varname" :content="variableName" />
 
     <Handle class="socket" type="target" :position="Position.Left" />
     <Handle class="socket" type="source" :position="Position.Right" />

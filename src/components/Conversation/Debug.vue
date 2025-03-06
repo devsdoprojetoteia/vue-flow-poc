@@ -9,7 +9,7 @@ import { Engine } from "../../domain/Conversation/Engine";
 const { currentState, currentStatus } = defineProps<Partial<Chat.Debug>>();
 
 const stepLabel = computed(() => {
-  if (!currentState) return "???";
+  if (!currentState) return "Raiz";
 
   const stepLabels: Record<Journey.StepType, string> = {
     root: "Raíz",
@@ -26,7 +26,7 @@ const stepLabel = computed(() => {
 });
 
 const statusLabel = computed(() => {
-  if (!currentStatus) return "???";
+  if (!currentStatus) return "Não iniciado";
 
   const statusLabels: Record<Engine.ConversationStatus, string> = {
     not_ready: "Não iniciado",
@@ -52,7 +52,7 @@ const statusLabel = computed(() => {
         color: `var(--${currentState?.input?.step ?? 'root'}-node-color)`,
       }"
     >
-      <NodeIcon :type="currentState?.input?.step ?? 'unknown'" />
+      <NodeIcon :type="currentState?.input?.step ?? 'root'" />
       {{ stepLabel }}
     </div>
     <div
@@ -62,7 +62,7 @@ const statusLabel = computed(() => {
         backgroundColor: `var(--${currentStatus ?? 'not_ready'}-status-color)`,
       }"
     >
-      <ConversationStatusIcon :status="currentStatus ?? 'unknown'" />
+      <ConversationStatusIcon :status="currentStatus ?? 'not_ready'" />
       {{ statusLabel }}
     </div>
   </div>

@@ -4,6 +4,9 @@ import type { Journey } from "../Journey/Journey";
 import { MessageProcessor } from "./Processor/MessageProcessor";
 import { TextInputProcessor } from "./Processor/TextInputProcessor";
 import { DecisionProcessor } from "./Processor/DecisionProcessor";
+import { SelectionProcessor } from "./Processor/SelectionProcessor";
+import { IntegrationProcessor } from "./Processor/IntegrationProcessor";
+import { DeclarationProcessor } from "./Processor/DeclarationProcessor";
 
 export namespace Engine {
 
@@ -33,7 +36,7 @@ export namespace Engine {
     id: UUID;
     inputMetadata?: ChatInputMetadata;
     outputMetadata?: ChatOutputMetadada;
-    content: string;
+    content?: string;
     sentAt: Date;
   }
 
@@ -41,7 +44,9 @@ export namespace Engine {
     selectedOption: string;
   }
 
-  export interface ChatOutputMetadada { }
+  export interface ChatOutputMetadada {
+    options: { label?: string, value: string }[];
+  }
 
   export interface ProcessingInput<T = Journey.Step> {
     variables: Record<string, any>;
@@ -61,9 +66,10 @@ export namespace Engine {
 
 }
 
-export default class SimulatedEngine {
+export default class EmulatedEngine {
 
   private handleNextUserInput?: (input: Engine.ChatIO) => Engine.ProcessedInput;
+  private processorsByStrategy: Record<Journey.StepType, Engine.StepProcessor>;
   private variables: Record<string, any> = {};
   private _currentState: Engine.ConversationTracking;
   private _status: Engine.ConversationStatus = "not_ready";
@@ -81,11 +87,29 @@ export default class SimulatedEngine {
     private readonly onFail: Engine.OnFailCallback,
 
     /* PROCESSORS */
-    private readonly messageProcessor: MessageProcessor = new MessageProcessor(),
-    private readonly textInputProcessor: TextInputProcessor = new TextInputProcessor(),
-    private readonly decisionProcessor: DecisionProcessor = new DecisionProcessor(),
+    readonly messageProcessor = new MessageProcessor(),
+    readonly declarationProcessor = new DeclarationProcessor(),
+    readonly decisionProcessor = new DecisionProcessor(),
+    readonly integrationProcessor = new IntegrationProcessor(),
+    readonly textInputProcessor = new TextInputProcessor(),
+    readonly selectionProcessor = new SelectionProcessor(),
   ) {
     this._currentState = primaryRoot;
+    const notImplementedStateProcessor: Engine.StepProcessor = {
+      process(_) {
+        throw Error("Não implementado");
+      }
+    }
+    this.processorsByStrategy = {
+      "root": notImplementedStateProcessor,
+      "message": messageProcessor,
+      "redirect": notImplementedStateProcessor,
+      "declaration": declarationProcessor,
+      "decision": decisionProcessor,
+      "integration": integrationProcessor,
+      "text-input": textInputProcessor,
+      "selection": selectionProcessor,
+    }
   }
 
   get status() {
@@ -149,7 +173,7 @@ export default class SimulatedEngine {
       };
       let loopCount = 0;
 
-      while (!SimulatedEngine.TERMINAL_STATUSES.includes(processedInput.nextStatus)) {
+      while (!EmulatedEngine.TERMINAL_STATUSES.includes(processedInput.nextStatus)) {
         if (this.currentState.numberOfOutputs == 0) {
           this.status = "completed";
           return;
@@ -172,24 +196,8 @@ export default class SimulatedEngine {
   }
 
   private processByStrategy(selectedOutput?: string) {
-    const notImplementedStateProcessor: Engine.StepProcessor = {
-      process(_) {
-        throw Error("Não implementado");
-      }
-    }
-    const processorsByStrategy: Record<Journey.StepType, Engine.StepProcessor> = {
-      "root": notImplementedStateProcessor,
-      "message": this.messageProcessor,
-      "redirect": notImplementedStateProcessor,
-      "declaration": notImplementedStateProcessor,
-      "decision": this.decisionProcessor,
-      "integration": notImplementedStateProcessor,
-      "text-input": this.textInputProcessor,
-      "selection": notImplementedStateProcessor,
-    }
-
     this.currentState = this.findNextState(selectedOutput);
-    const processor = processorsByStrategy[this.currentState.input.step];
+    const processor = this.processorsByStrategy[this.currentState.input.step];
 
     const processed = processor.process({
       variables: this.variables,
@@ -323,7 +331,7 @@ export default class SimulatedEngine {
     const primaryRoot = secondaryRoots[0];
 
     (window as any).graph = { nodes, edges };
-    return new SimulatedEngine(
+    return new EmulatedEngine(
       primaryRoot as Engine.ConversationTracking<Journey.Root>,
       secondaryRoots as Engine.ConversationTracking<Journey.Root>[],
       redirects as Engine.ConversationTracking<Journey.Redirect>[],

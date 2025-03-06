@@ -4,6 +4,7 @@ import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import Variable from "../Variable.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
@@ -46,7 +47,7 @@ const request = computed(() => {
     </div>
 
     <div class="divider" />
-    <code class="varname">{{ variableName }}</code>
+    <Variable class="varname" :content="variableName" />
     <div class="divider" />
     <code class="request">{{ request }}</code>
 
@@ -137,6 +138,8 @@ const request = computed(() => {
 }
 
 .request {
+  font-weight: bold;
+  color: darkgreen;
   text-align: left;
   -webkit-line-clamp: 6;
   line-clamp: 6;

@@ -60,6 +60,14 @@ body,
 	-moz-osx-font-smoothing: grayscale;
 }
 
+p {
+	margin: 0;
+}
+
+p:not(:last-child) {
+	margin-bottom: 0.5em;
+}
+
 .vue-flow__node {
   background: white;
 }

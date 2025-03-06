@@ -4,24 +4,10 @@ import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import Variable from "../Variable.vue";
 
 const { edit } = useNodeEditor();
 const { data } = defineProps<NodeProps>();
-
-const variable = computed(() => {
-  let text = `${data.variable.name}: ${data.variable.type} = `;
-
-  switch (data.variable.type) {
-    case "string":
-      text += `"${data.variable.value}"`
-      break;
-    default:
-      text += JSON.stringify(data.variable.value);
-      break;
-  }
-
-  return text;
-});
 </script>
 
 <template>
@@ -46,7 +32,12 @@ const variable = computed(() => {
 
     <div class="divider" />
 
-    <code class="varname">{{ variable }}</code>
+    <code class="variable">
+      <i>{{ data.variable.type }}</i>
+      <Variable :content="data.variable.name" />
+      =
+      <Variable :content="data.variable.value" />
+    </code>
 
     <Handle class="socket" type="target" :position="Position.Left" />
     <Handle class="socket" type="source" :position="Position.Right" />
@@ -121,7 +112,7 @@ const variable = computed(() => {
   background: lightblue;
 }
 
-.varname {
+.variable {
   margin: 1em;
   font-size: 0.4rem;
   overflow: hidden;
@@ -131,6 +122,16 @@ const variable = computed(() => {
   -webkit-box-orient: vertical;
   text-align: left;
   position: relative;
+  display: flex;
+  gap: 2px;
+}
+
+.variable > i {
+  color: darkcyan;
+}
+
+.variable > .highlighted-variable {
+  gap: 2px;
 }
 
 .socket {

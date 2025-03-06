@@ -13,7 +13,6 @@ export default function useDragAndDrop() {
     screenToFlowCoordinate,
     onNodesInitialized,
     updateNode,
-    toObject,
   } = useVueFlow();
   const { save } = useJourneySync();
 
