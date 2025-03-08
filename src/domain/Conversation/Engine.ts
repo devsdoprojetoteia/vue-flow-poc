@@ -7,6 +7,8 @@ import { DecisionProcessor } from "./Processor/DecisionProcessor";
 import { SelectionProcessor } from "./Processor/SelectionProcessor";
 import { IntegrationProcessor } from "./Processor/IntegrationProcessor";
 import { DeclarationProcessor } from "./Processor/DeclarationProcessor";
+import { RedirectProcessor } from "./Processor/RedirectProcessor";
+import { RootProcessor } from "./Processor/RootProcessor";
 
 export namespace Engine {
 
@@ -37,6 +39,8 @@ export namespace Engine {
     inputMetadata?: ChatInputMetadata;
     outputMetadata?: ChatOutputMetadada;
     content?: string;
+    contentType?: Journey.Message.Type;
+    b64?: string;
     sentAt: Date;
   }
 
@@ -52,6 +56,8 @@ export namespace Engine {
     variables: Record<string, any>;
     currentState: ConversationTracking<T>;
     sendMessage: (message: ChatIO) => void;
+    secondaryRoots: Engine.ConversationTracking<Journey.Root>[];
+    redirects: Engine.ConversationTracking<Journey.Redirect>[];
   }
 
   export interface ProcessedInput {
@@ -87,7 +93,9 @@ export default class EmulatedEngine {
     private readonly onFail: Engine.OnFailCallback,
 
     /* PROCESSORS */
+    readonly rootProcessor = new RootProcessor(),
     readonly messageProcessor = new MessageProcessor(),
+    readonly redirectProcessor = new RedirectProcessor(),
     readonly declarationProcessor = new DeclarationProcessor(),
     readonly decisionProcessor = new DecisionProcessor(),
     readonly integrationProcessor = new IntegrationProcessor(),
@@ -95,15 +103,10 @@ export default class EmulatedEngine {
     readonly selectionProcessor = new SelectionProcessor(),
   ) {
     this._currentState = primaryRoot;
-    const notImplementedStateProcessor: Engine.StepProcessor = {
-      process(_) {
-        throw Error("Não implementado");
-      }
-    }
     this.processorsByStrategy = {
-      "root": notImplementedStateProcessor,
+      "root": rootProcessor,
       "message": messageProcessor,
-      "redirect": notImplementedStateProcessor,
+      "redirect": redirectProcessor,
       "declaration": declarationProcessor,
       "decision": decisionProcessor,
       "integration": integrationProcessor,
@@ -174,7 +177,10 @@ export default class EmulatedEngine {
       let loopCount = 0;
 
       while (!EmulatedEngine.TERMINAL_STATUSES.includes(processedInput.nextStatus)) {
-        if (this.currentState.numberOfOutputs == 0) {
+        if (
+          this.currentState.numberOfOutputs == 0 && 
+          this.currentState.input.step !== "redirect"
+        ) {
           this.status = "completed";
           return;
         }
@@ -186,7 +192,9 @@ export default class EmulatedEngine {
         this.status = processedInput.nextStatus;
         this.handleNextUserInput = processedInput.handleNextUserInput;
 
-        if (loopCount > 99) break;
+        if (loopCount > 10) {
+          throw Error("Um possível loop infinito foi interrompido!");
+        }
       }
     } catch (error) {
       console.error(error);
@@ -202,6 +210,8 @@ export default class EmulatedEngine {
     const processed = processor.process({
       variables: this.variables,
       currentState: this.currentState,
+      secondaryRoots: this.secondaryRoots,
+      redirects: this.redirects,
       sendMessage: (message: Engine.ChatIO) => {
         this.status = "sending_message";
         this.sendMessage(message);
@@ -322,13 +332,12 @@ export default class EmulatedEngine {
       }
       return acc;
     }, [] as Engine.ConversationTracking[]);
-    const secondaryRoots = tracking.reduce((acc, item) => {
+    const [primaryRoot, ...secondaryRoots] = tracking.reduce((acc, item) => {
       if (item.input.step === "root") {
         return [...acc, item];
       }
       return acc;
     }, [] as Engine.ConversationTracking[]);
-    const primaryRoot = secondaryRoots[0];
 
     (window as any).graph = { nodes, edges };
     return new EmulatedEngine(

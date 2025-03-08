@@ -4,16 +4,17 @@ import { Position, Handle } from "@vue-flow/core";
 import type { NodeProps } from "@vue-flow/core";
 import useNodeEditor from "../../composables/useNodeEditor";
 import NodeIcon from "../NodeIcon.vue";
+import { Journey } from "../../domain/Journey/Journey";
 
 const { edit } = useNodeEditor();
-const { data } = defineProps<NodeProps>();
+const { data } = defineProps<NodeProps<Journey.Redirect>>();
 
 const title = computed(() => data.title);
-const targetJourneyId = computed(() => data.targetJourneyId.source);
+const targetJourneyId = computed(() => data.targetJourneyId?.source);
 </script>
 
 <template>
-  <div class="vue-flow__node-default node-wrapper">
+  <div class="vue-flow__node-default node-wrapper" @dblclick="() => edit(data)">
     <div class="title">
       <NodeIcon type="redirect" />
 
@@ -36,9 +37,10 @@ const targetJourneyId = computed(() => data.targetJourneyId.source);
 
     <span class="journey-title">{{ title }}</span>
 
-    <div class="divider" />
-
-    <code class="journey-id">{{ targetJourneyId }}</code>
+    <template v-if="targetJourneyId">
+      <div class="divider" />
+      <code class="journey-id">{{ targetJourneyId }}</code>
+    </template>
 
     <Handle class="socket" type="target" :position="Position.Left" />
   </div>
@@ -115,7 +117,8 @@ const targetJourneyId = computed(() => data.targetJourneyId.source);
   background: lightblue;
 }
 
-.journey-id, .journey-title {
+.journey-id,
+.journey-title {
   margin: 1em;
   font-size: 0.4rem;
   overflow: hidden;
@@ -146,7 +149,7 @@ const targetJourneyId = computed(() => data.targetJourneyId.source);
   border: none;
 }
 
-.selected > .node-wrapper > .socket {
+.selected .socket {
   border: 1px solid lightblue;
 }
 </style>

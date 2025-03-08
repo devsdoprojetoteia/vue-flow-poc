@@ -14,7 +14,9 @@
     "@vue-flow/controls": "^1.1.2",
     "@vue-flow/core": "^1.42.1",
     "@vue-flow/minimap": "^1.5.2",
+    "@vue-flow/node-toolbar": "^1.1.0",
     "dompurify": "^3.2.4",
+    "fitty": "^2.4.2",
     "marked": "^15.0.7",
     "vue": "^3.5.13",
     "vuex": "^4.1.0"

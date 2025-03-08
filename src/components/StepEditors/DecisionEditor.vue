@@ -14,8 +14,8 @@ const operatorOptions = computed(() =>
   <FormKit
     name="title"
     type="text"
-    label="Título"
-    help="Observação do editor (o chatbot não enviará como mensagem)."
+    label="Nota do editor"
+    help="Não será enviada no chat."
   />
   <FormKit
     name="expressions"

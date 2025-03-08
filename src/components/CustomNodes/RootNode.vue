@@ -11,7 +11,10 @@ function copyToClipboard() {
 </script>
 
 <template>
-  <div class="vue-flow__node-default node-wrapper">
+  <div
+    class="vue-flow__node-default node-wrapper"
+    :title="data.journeyId.source"
+  >
     <div class="title">
       <NodeIcon type="root" />
 
@@ -23,7 +26,7 @@ function copyToClipboard() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
       >
-        <title>content-copy</title>
+        <title>Copiar id da Jornada</title>
         <path
           d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"
         />
@@ -88,7 +91,8 @@ function copyToClipboard() {
 
 .socket {
   background: var(--root-node-color) !important;
-  visibility: inherit;
+  border: none;
+  top: 12px;
 }
 
 .socket:hover {

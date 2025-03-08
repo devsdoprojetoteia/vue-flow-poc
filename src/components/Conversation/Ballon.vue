@@ -14,6 +14,7 @@ const { messages } = useConversationEngine();
 
 const message = defineProps<Chat.Message>();
 const content = computed(() => message.content);
+const b64 = computed(() => message.b64);
 const options = computed(() => message.outputMetadata?.options);
 const emit = defineEmits<BallonEvents>();
 
@@ -36,6 +37,8 @@ function handleOptionClick(value: string, label?: string) {
     </div>
     <code v-if="message.type === 'error'" v-html="content" />
     <Markdown v-else :content="content" />
+    <img v-if="b64 && message.contentType === 'image'" :src="b64" />
+    <video v-if="b64 && message.contentType === 'video'" controls />
     <div class="options-wrapper" v-if="!!options && options.length > 0">
       <button
         class="option"

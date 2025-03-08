@@ -8,6 +8,7 @@ import {
   SelectionNode,
   DecisionNode,
   RedirectNode,
+  PostitNode,
 } from "./components/CustomNodes";
 
 import { computed, ref, watchEffect } from "vue";
@@ -45,7 +46,7 @@ const nodes = ref([
     data: journeyStepFactory.root(),
     deletable: false,
     selectable: false,
-    draggable: false,
+    draggable: true,
   },
 ]);
 
@@ -122,6 +123,10 @@ onConnect((connection) => {
       <!-- NÓ DE REDIRECIONAMENTO DE JORNADA -->
       <template #node-redirect="redirectNodeProps">
         <RedirectNode v-bind="redirectNodeProps" />
+      </template>
+      <!-- POSTIT DE OBSERVAÇÕES -->
+      <template #node-postit="postitNodeProps">
+        <PostitNode v-bind="postitNodeProps" />
       </template>
 
       <DropzoneBackground

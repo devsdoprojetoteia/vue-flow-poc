@@ -25,19 +25,6 @@ const { isSynchronizing } = useJourneySync();
 
     <hr />
 
-    <ul class="nodes">
-      <li
-        class="vue-flow__node-root"
-        :draggable="true"
-        @dragstart="onDragStart($event, JourneyStepFactory.root())"
-      >
-        <div class="node-preview" id="root">
-          <NodeIcon type="root" />
-          <h4>Jornada</h4>
-        </div>
-      </li>
-    </ul>
-
     <h3>Outputs</h3>
     <ul class="nodes">
       <li
@@ -120,6 +107,31 @@ const { isSynchronizing } = useJourneySync();
           <h4>Seleção</h4>
         </div>
       </li>
+      <li
+        class="vue-flow__node-root"
+        :draggable="true"
+        @dragstart="onDragStart($event, JourneyStepFactory.root())"
+      >
+        <div class="node-preview" id="root">
+          <NodeIcon type="root" />
+          <h4>Jornada</h4>
+        </div>
+      </li>
+    </ul>
+
+    <hr />
+    <h3>Apoio</h3>
+    <ul class="nodes">
+      <li
+        class="vue-flow__node-postit"
+        :draggable="true"
+        @dragstart="onDragStart($event, JourneyStepFactory.postit())"
+      >
+        <div class="node-preview" id="postit">
+          <NodeIcon type="postit" />
+          <h4>Anotação</h4>
+        </div>
+      </li>
     </ul>
 
     <div class="footer" v-if="isSynchronizing">
@@ -151,10 +163,11 @@ ul.nodes > li {
 ul.nodes > li > .node-preview {
   display: flex;
   align-items: center;
+  gap: 8px;
 }
 
 h4 {
-  margin: 0 8px;
+  margin: 0;
 }
 
 svg {
@@ -192,6 +205,10 @@ svg {
 #integration {
   color: var(--integration-node-color) !important;
   fill: currentColor !important;
+}
+
+.vue-flow__node-postit {
+  background-color: lightgoldenrodyellow !important;
 }
 
 .footer {

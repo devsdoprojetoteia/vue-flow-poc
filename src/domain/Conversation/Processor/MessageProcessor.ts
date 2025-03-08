@@ -14,7 +14,9 @@ export class MessageProcessor implements Engine.StepProcessor {
 
     sendMessage({
       id: UUID.random(),
-      content: interpolate(currentState.input.content, variables) ?? "",
+      contentType: currentState.input.type,
+      content: interpolate(currentState.input.content, variables),
+      b64: currentState.input.b64,
       sentAt: new Date(),
     });
 

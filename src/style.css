@@ -69,7 +69,16 @@ p:not(:last-child) {
 }
 
 .vue-flow__node {
-  background: white;
+  background: #fff4;
+	backdrop-filter: blur(1px);
+}
+
+.vue-flow__edge > path {
+	stroke: lightgray !important;
+}
+
+.vue-flow__edge.selected > path {
+	stroke: dodgerblue !important;
 }
 
 .vue-flow__minimap {

@@ -4,7 +4,7 @@ export default function highlightVariable(
   return template?.replace(/\{\{([^{}]+)\}\}/g, (_, variableName) => {
     return `
       <span>{{</span>
-      <b>${variableName}</b>
+      <b>${variableName.trim()}</b>
       <span>}}</span>
     `;
   });

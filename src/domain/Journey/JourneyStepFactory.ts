@@ -7,7 +7,7 @@ const journeyStepFactory: Journey.StepFactory = {
       id: UUID.random(),
       step: "root",
       journeyId: UUID.random(),
-    }
+    };
   },
   message() {
     return {
@@ -15,15 +15,14 @@ const journeyStepFactory: Journey.StepFactory = {
       step: "message",
       type: "text",
       content: "Hello, {{ world }}!",
-    }
+    };
   },
   redirect() {
     return {
       id: UUID.random(),
       step: "redirect",
-      title: "Jornada Teste",
-      targetJourneyId: UUID.random(),
-    }
+      title: "Jornada",
+    };
   },
   declaration() {
     return {
@@ -34,7 +33,7 @@ const journeyStepFactory: Journey.StepFactory = {
         type: "string",
         value: "bar"
       }
-    }
+    };
   },
   decision() {
     return {
@@ -59,7 +58,7 @@ const journeyStepFactory: Journey.StepFactory = {
           }
         },
       ]
-    }
+    };
   },
   integration() {
     return {
@@ -69,14 +68,14 @@ const journeyStepFactory: Journey.StepFactory = {
       request: {
         url: "https://example.com",
       }
-    }
+    };
   },
   textInput() {
     return {
       id: UUID.random(),
       step: "text-input",
       variableName: "resposta"
-    }
+    };
   },
   selection() {
     return {
@@ -87,8 +86,14 @@ const journeyStepFactory: Journey.StepFactory = {
         { id: UUID.random(), label: "Não 👎" }
       ],
       defaultOption: { id: UUID.random(), variableName: "resposta" },
-    }
-  }
-}
+    };
+  },
+  postit() {
+    return {
+      id: UUID.random(),
+      step: "postit" as unknown as Journey.StepType,
+    };
+  },
+};
 
 export default journeyStepFactory;

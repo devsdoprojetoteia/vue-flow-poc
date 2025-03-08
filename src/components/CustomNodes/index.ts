@@ -6,3 +6,4 @@ export { default as TextInputNode } from "./TextInputNode.vue";
 export { default as RedirectNode } from "./RedirectNode.vue";
 export { default as RootNode } from "./RootNode.vue";
 export { default as SelectionNode } from "./SelectionNode.vue";
+export { default as PostitNode } from "./PostitNode.vue";

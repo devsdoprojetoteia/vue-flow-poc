@@ -21,6 +21,7 @@ export namespace Journey {
     integration(id?: string | UUID): Integration,
     textInput(id?: string | UUID): TextInput,
     selection(id?: string | UUID): Selection,
+    postit(): Postit,
   }
 
   export interface Step {
@@ -36,7 +37,9 @@ export namespace Journey {
     | Decision
     | Integration
     | TextInput
-    | Selection
+    | Selection;
+
+  export type Postit = Pick<Message, "id" | "step" | "content">;
 
   /**
    * ===========================================================================
@@ -210,7 +213,7 @@ export namespace Journey {
    */
   export interface Redirect extends Step {
     title: string;
-    targetJourneyId: UUID;
+    targetJourneyId?: UUID;
   }
 
 }

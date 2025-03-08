@@ -13,7 +13,7 @@ const variableName = computed(() => `{{ ${data.variableName} }}`);
 </script>
 
 <template>
-  <div class="vue-flow__node-default node-wrapper">
+  <div class="vue-flow__node-default node-wrapper" @dblclick="() => edit(data)">
     <div class="title">
       <NodeIcon type="text-input" />
 
@@ -44,7 +44,7 @@ const variableName = computed(() => `{{ ${data.variableName} }}`);
 <style scoped>
 .node-wrapper {
   border-radius: 2px;
-  background: white;
+  background: none;
   border: 1px solid lightgray;
   -webkit-box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.3);
   -moz-box-shadow: 0px 0px 4px -1px rgba(0, 0, 0, 0.3);
@@ -140,7 +140,7 @@ const variableName = computed(() => `{{ ${data.variableName} }}`);
   border: none;
 }
 
-.selected > .node-wrapper > .socket {
+.selected .socket {
   border: 1px solid lightblue;
 }
 </style>
