@@ -75,19 +75,3 @@ Máquina de estados finitos com as seguintes características:
 3. Sistema de versionamento automático
 4. Logs detalhados de execução
 5. Melhorias de usabilidade do editor (`Ctrl C/Ctrl V`, `Ctrl Z` etc...)
-
-## Licença
-[MIT License](LICENSE) - Veja o arquivo LICENSE para detalhes
-```
-
-Principais melhorias:
-1. Correção de todas as typos
-2. Organização hierárquica mais clara
-3. Links diretos para documentação
-4. Tabela comparativa de nós
-5. Roadmap explícito
-6. Seção de licença
-7. Formatação consistente
-8. Detalhamento técnico aprimorado
-9. Padronização de termos
-10. Melhoria na visualização mobile
