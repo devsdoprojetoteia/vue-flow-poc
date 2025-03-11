@@ -161,9 +161,6 @@ export default class EmulatedEngine {
       if (this.currentState.input.step !== "root" && !input)
         throw Error("Impossível prosseguir sem um input do usuário");
 
-      (window as any).engine = this;
-      console.log("out", this.currentState);
-
       if (!selectedOutput) {
         selectedOutput = this.currentState.numberOfOutputs === 1
           ? this.currentState.outputs[this.currentState.input.id.source]

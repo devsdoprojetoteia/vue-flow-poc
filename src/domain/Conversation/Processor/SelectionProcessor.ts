@@ -26,16 +26,19 @@ export class SelectionProcessor implements Engine.StepProcessor {
 
     return {
       handleNextUserInput: (input) => {
-        let selectedOption = input?.inputMetadata?.selectedOption ??
-          currentState.input.options.find(
+        let selectedOption = input?.inputMetadata?.selectedOption
+          ?? currentState.input.options.find(
             ({ label }) => label === input?.content
-          )?.id?.source ??
-          currentState.input.defaultOption.id.source;
+          )?.id?.source;
+        let defaultOption = currentState.input.defaultOption.id.source;
 
         variables[currentState.input.defaultOption.variableName] =
           selectedOption;
 
-        const selectedOutput = currentState.outputs[selectedOption];
+        const selectedOutput =
+          currentState.outputs[selectedOption ?? defaultOption];
+
+        if (!selectedOutput) return { nextStatus: "completed" };
 
         return { nextStatus: "processed", selectedOutput };
       },

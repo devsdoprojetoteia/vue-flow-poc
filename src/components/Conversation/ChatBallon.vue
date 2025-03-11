@@ -80,6 +80,7 @@ function handleOptionClick(value: string, label?: string) {
 
 .message > * {
   padding: 0.2rem 0.3rem;
+  max-width: calc(100% - 0.6rem);
 }
 
 .message > .bot {

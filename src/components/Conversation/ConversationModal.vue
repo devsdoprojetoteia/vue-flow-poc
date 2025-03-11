@@ -2,7 +2,7 @@
 import { onMounted, onUpdated, ref } from "vue";
 import useConversationEngine from "../../composables/useConversationEngine";
 import { Chat } from "../../store/modules/chat";
-import Ballon from "./Ballon.vue";
+import ChatBallon from "./ChatBallon.vue";
 import Debug from "./Debug.vue";
 
 const { isDeploying, cancel, messages, sendMessage, clearMessages, debug } =
@@ -82,7 +82,7 @@ onUpdated(() => {
       </div>
 
       <div class="chat" v-else-if="messages.length > 0">
-        <Ballon
+        <ChatBallon
           v-for="message in messages"
           :key="message.id.source"
           v-bind="message"
